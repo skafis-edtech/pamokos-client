@@ -1,0 +1,3 @@
+# pamokos.skafis.lt
+
+More info soon...
