@@ -1,35 +1,35 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import MobileHeader from "./components/MobileHeader";
+import DesktopHeader from "./components/DesktopHeader";
+import { BrowserRouter, Route, Routes } from "react-router";
+import { routes } from "./pages/routes";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <BrowserRouter>
+        <header>
+          <MobileHeader isLoggedIn={false} />
+          <DesktopHeader isLoggedIn={false} />
+        </header>
+        <main>
+          <aside></aside>
+          <section>
+            <Routes>
+              {routes.map((route, index) => (
+                <Route
+                  key={index}
+                  path={route.path}
+                  element={<route.element />}
+                />
+              ))}
+            </Routes>
+          </section>
+          <aside></aside>
+        </main>
+        <footer>(c) 2025 MB Skafis, naglis.suliokas@gmail.com</footer>
+      </BrowserRouter>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
