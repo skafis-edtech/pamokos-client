@@ -8,14 +8,16 @@ import {
   Box,
 } from "@mui/material";
 import { useNavigate } from "react-router";
+import { loginUser } from "../services/firestore";
 
 const HomeLoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = (event: React.FormEvent) => {
+  const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
+    await loginUser(email, password);
     navigate("/dashboard");
   };
 

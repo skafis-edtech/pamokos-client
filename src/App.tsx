@@ -1,32 +1,34 @@
-import MobileHeader from "./components/MobileHeader";
-import DesktopHeader from "./components/DesktopHeader";
 import { BrowserRouter, Route, Routes } from "react-router";
-import { routes } from "./pages/routes";
+import { privateRoutes, publicRoutes } from "./pages/routes";
+import { AuthProvider } from "./context/AuthContext";
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   return (
     <>
       <BrowserRouter>
-        <header>
-          <MobileHeader isLoggedIn={false} />
-          <DesktopHeader isLoggedIn={false} />
-        </header>
-        <main>
-          <aside></aside>
-          <section>
-            <Routes>
-              {routes.map((route, index) => (
-                <Route
-                  key={index}
-                  path={route.path}
-                  element={<route.element />}
-                />
-              ))}
-            </Routes>
-          </section>
-          <aside></aside>
-        </main>
-        <footer>(c) 2025 MB Skafis, naglis.suliokas@gmail.com</footer>
+        <AuthProvider>
+          <Routes>
+            {publicRoutes.map((route) => (
+              <Route
+                key={route.path}
+                path={route.path}
+                element={<route.element />}
+              />
+            ))}
+            {privateRoutes.map((route) => (
+              <Route
+                key={route.path}
+                path={route.path}
+                element={<PrivateRoute />}
+              >
+                <Route path={route.path} element={<route.element />} />
+              </Route>
+            ))}
+          </Routes>
+
+          <footer>(c) 2025 MB Skafis, naglis.suliokas@gmail.com</footer>
+        </AuthProvider>
       </BrowserRouter>
     </>
   );

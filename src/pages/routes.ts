@@ -1,9 +1,16 @@
+import { FC } from "react";
 import AboutPage from "./AboutPage";
 import DashboardPage from "./DashboardPage";
 import HomeLoginPage from "./HomeLoginPage";
 import LogoutPage from "./LogoutPage";
 
-export const routes = [
+export interface IRoute {
+  path: string;
+  title: string;
+  element: FC;
+}
+
+export const publicRoutes: IRoute[] = [
   {
     path: "/",
     title: "HomeLogin",
@@ -14,6 +21,9 @@ export const routes = [
     title: "About",
     element: AboutPage,
   },
+];
+
+export const privateRoutes: IRoute[] = [
   {
     path: "/dashboard",
     title: "Dashboard",
