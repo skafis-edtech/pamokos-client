@@ -1,13 +1,19 @@
 import { useAuth } from "../../context/AuthContext";
+import StudentDashboard from "./StudentDashboard";
+import TeacherDashboard from "./TeacherDashboard";
 
 const DashboardPage: React.FC = () => {
-  const { currentUser, role } = useAuth();
+  const { role } = useAuth();
+
   return (
     <>
-      <h1>
-        {role}
-        {currentUser?.email || "Kraunasi..."}
-      </h1>
+      {role === "STUDENT" ? (
+        <StudentDashboard />
+      ) : role === "TEACHER" ? (
+        <TeacherDashboard />
+      ) : (
+        <h1>User role {role} is ILLEGAL :OOOOO</h1>
+      )}
     </>
   );
 };

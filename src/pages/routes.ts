@@ -3,6 +3,7 @@ import AboutPage from "./AboutPage";
 import DashboardPage from "./DashboardPage";
 import HomeLoginPage from "./HomeLoginPage";
 import LogoutPage from "./LogoutPage";
+import CreateEditLessonPage from "./CreateEditLessonPage";
 
 export interface IRoute {
   path: string;
@@ -21,6 +22,11 @@ export const publicRoutes: IRoute[] = [
     title: "About",
     element: AboutPage,
   },
+  {
+    path: "*",
+    title: "HomeLogin",
+    element: HomeLoginPage,
+  },
 ];
 
 export const privateRoutes: IRoute[] = [
@@ -35,8 +41,8 @@ export const privateRoutes: IRoute[] = [
     element: LogoutPage,
   },
   {
-    path: "*",
-    title: "HomeLogin",
-    element: HomeLoginPage,
+    path: "/createEditLesson/:id",
+    title: "CreateEditLesson",
+    element: CreateEditLessonPage,
   },
 ];
