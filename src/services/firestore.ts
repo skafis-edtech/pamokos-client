@@ -11,7 +11,10 @@ import {
 } from "firebase/firestore";
 import { Lesson, LessonCreate, UserRole } from "../types";
 import { auth, db } from "./firebaseConfig";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 
 export const fetchUserRole = async (userId: string) => {
   const userDoc = doc(db, `users/${userId}`);
@@ -37,6 +40,15 @@ export const logoutUser = async () => {
     await auth.signOut();
   } catch (error: any) {
     console.error("Error logging out: ", error);
+    alert("Klaida: " + error.message);
+  }
+};
+
+export const restorePassword = async (email: string) => {
+  try {
+    await sendPasswordResetEmail(auth, email);
+  } catch (error: any) {
+    console.error("Error restoring password: ", error);
     alert("Klaida: " + error.message);
   }
 };

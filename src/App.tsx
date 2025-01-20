@@ -27,7 +27,10 @@ function App() {
             ))}
           </Routes>
 
-          <footer>(c) 2025 MB Skafis, naglis.suliokas@gmail.com</footer>
+          <footer>
+            &copy; 2025 MB Skafis,{" "}
+            <a href="mailto:info@skafis.lt">info@skafis.lt</a>
+          </footer>
         </AuthProvider>
       </BrowserRouter>
     </>

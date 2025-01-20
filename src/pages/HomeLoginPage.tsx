@@ -8,7 +8,7 @@ import {
   Box,
 } from "@mui/material";
 import { useNavigate } from "react-router";
-import { loginUser } from "../services/firestore";
+import { loginUser, restorePassword } from "../services/firestore";
 
 const HomeLoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -17,8 +17,13 @@ const HomeLoginPage: React.FC = () => {
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
-    await loginUser(email, password);
-    navigate("/dashboard");
+    await loginUser(email, password).then(() => navigate("/dashboard"));
+  };
+
+  const handlePasswordReset = async () => {
+    await restorePassword(email).then(() =>
+      alert("Email sent from noreply@pamokos-skafis.firebaseapp.com")
+    );
   };
 
   return (
@@ -63,9 +68,7 @@ const HomeLoginPage: React.FC = () => {
           <Button
             variant="text"
             color="info"
-            onClick={() =>
-              alert("Email sent from noreply@pamokos-skafis.firebaseapp.com")
-            }
+            onClick={handlePasswordReset}
             fullWidth
             sx={{ mt: 1 }}
           >
