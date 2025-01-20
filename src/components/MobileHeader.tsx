@@ -1,7 +1,6 @@
 import {
   AppBar,
   Box,
-  Divider,
   Drawer,
   IconButton,
   List,

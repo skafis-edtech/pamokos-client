@@ -58,9 +58,18 @@ const CreateEditLessonPage: React.FC = () => {
             margin="normal"
           />
           <TextField
-            label="Date"
-            value={lesson.date}
-            onChange={(e) => setLesson({ ...lesson, date: e.target.value })}
+            label="Date starts"
+            value={lesson.startedAt}
+            onChange={(e) =>
+              setLesson({ ...lesson, startedAt: e.target.value })
+            }
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="Date ends"
+            value={lesson.endedAt}
+            onChange={(e) => setLesson({ ...lesson, endedAt: e.target.value })}
             fullWidth
             margin="normal"
           />
