@@ -1,9 +1,11 @@
 export type UserRole = "STUDENT" | "TEACHER";
+export type LessonState = "ONGOING" | "PAST" | "LOCKED";
 
 export interface LessonCreate {
   title: string;
   groupId: string;
-  date: string;
+  startedAt: string;
+  endedAt: string;
   content: string;
   recording: string;
   meetingLink: string;
@@ -13,4 +15,5 @@ export interface LessonCreate {
 
 export interface Lesson extends LessonCreate {
   id: string;
+  locked: boolean;
 }
