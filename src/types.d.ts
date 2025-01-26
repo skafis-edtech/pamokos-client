@@ -17,3 +17,11 @@ export interface Lesson extends LessonCreate {
   id: string;
   locked: boolean;
 }
+
+export interface Group {
+  id: string;
+  name: string;
+  description: string;
+  studentIds: string[];
+  teacherId: string;
+}

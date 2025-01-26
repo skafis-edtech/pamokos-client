@@ -9,7 +9,7 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { Lesson, LessonCreate, UserRole } from "../types";
+import { Group, Lesson, LessonCreate, UserRole } from "../types";
 import { auth, db } from "./firebaseConfig";
 import {
   sendPasswordResetEmail,
@@ -97,6 +97,15 @@ export const getLessons = async (groupId: string) => {
   const lessonsQuery = query(lessonsRef, where("groupId", "==", groupId));
   const lessonsSnapshot = await getDocs(lessonsQuery);
   return lessonsSnapshot.docs.map(
-    (doc) => ({ id: doc.id, ...doc.data() } as Lesson)
+    (doc) => ({ id: doc.id, locked: false, ...doc.data() } as Lesson)
   );
+};
+
+export const getGroupData = async (groupId: string) => {
+  const groupDoc = doc(db, "groups", groupId);
+  const groupSnapshot = await getDoc(groupDoc);
+  if (groupSnapshot.exists()) {
+    return groupSnapshot.data() as Group;
+  }
+  return null;
 };
