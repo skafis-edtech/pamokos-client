@@ -9,7 +9,7 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { Group, Lesson, LessonCreate, UserRole } from "../types";
+import { Bill, Group, Lesson, LessonCreate, UserRole } from "../types";
 import { auth, db } from "./firebaseConfig";
 import {
   sendPasswordResetEmail,
@@ -118,6 +118,27 @@ export const participate = async (lessonId: string, userId: string) => {
     if (!lessonData.participated.includes(userId)) {
       lessonData.participated.push(userId);
       await updateDoc(lessonDoc, { participated: lessonData.participated });
+      const billQuery = query(
+        collection(db, "bills"),
+        where("studentId", "==", userId),
+        where("lessonId", "==", lessonId),
+        where("from", "<=", new Date()),
+        where("to", ">=", new Date())
+      );
+      const billSnapshot = await getDocs(billQuery);
+      if (!billSnapshot.empty) {
+        const billDoc = billSnapshot.docs[0];
+        const billData = billDoc.data() as Bill;
+        billData.events.push({
+          event: "CLICKED_ON_PARTICIPATION_LINK",
+          timestamp: new Date().toISOString(),
+        });
+        await updateDoc(billDoc.ref, { events: billData.events });
+      } else {
+        alert(
+          "Klaida: Nėra sąskaitos į kurią įrašyti įvykį! Būtinai susisiekite su mokytoju!"
+        );
+      }
       alert("Dalyvavimas užregistruotas! Atidaroma nuoroda");
     } else {
       alert("Jau esate užregistruoti, tik atidaroma nuoroda");
@@ -133,9 +154,30 @@ export const enroll = async (lessonId: string, userId: string) => {
     if (!lessonData.onlyUseContent.includes(userId)) {
       lessonData.onlyUseContent.push(userId);
       await updateDoc(lessonDoc, { onlyUseContent: lessonData.onlyUseContent });
+      const billQuery = query(
+        collection(db, "bills"),
+        where("studentId", "==", userId),
+        where("lessonId", "==", lessonId),
+        where("from", "<=", new Date()),
+        where("to", ">=", new Date())
+      );
+      const billSnapshot = await getDocs(billQuery);
+      if (!billSnapshot.empty) {
+        const billDoc = billSnapshot.docs[0];
+        const billData = billDoc.data() as Bill;
+        billData.events.push({
+          event: "ENROLLED",
+          timestamp: new Date().toISOString(),
+        });
+        await updateDoc(billDoc.ref, { events: billData.events });
+      } else {
+        alert(
+          "Klaida: Nėra sąskaitos į kurią įrašyti įvykį! Būtinai susisiekite su mokytoju!"
+        );
+      }
       alert("Dalyvavimas užregistruotas!");
     } else {
-      alert("Jūs jau dalyvavote!");
+      alert("Jūs jau užregistruotas! Klaida!");
     }
   }
 };
