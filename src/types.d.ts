@@ -15,7 +15,6 @@ export interface LessonCreate {
 
 export interface Lesson extends LessonCreate {
   id: string;
-  locked: boolean;
 }
 
 export interface Group {

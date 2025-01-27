@@ -97,7 +97,7 @@ export const getLessons = async (groupId: string) => {
   const lessonsQuery = query(lessonsRef, where("groupId", "==", groupId));
   const lessonsSnapshot = await getDocs(lessonsQuery);
   return lessonsSnapshot.docs.map(
-    (doc) => ({ id: doc.id, locked: false, ...doc.data() } as Lesson)
+    (doc) => ({ id: doc.id, ...doc.data() } as Lesson)
   );
 };
 
@@ -108,4 +108,34 @@ export const getGroupData = async (groupId: string) => {
     return groupSnapshot.data() as Group;
   }
   return null;
+};
+
+export const participate = async (lessonId: string, userId: string) => {
+  const lessonDoc = doc(db, "lessons", lessonId);
+  const lessonSnapshot = await getDoc(lessonDoc);
+  if (lessonSnapshot.exists()) {
+    const lessonData = lessonSnapshot.data() as Lesson;
+    if (!lessonData.participated.includes(userId)) {
+      lessonData.participated.push(userId);
+      await updateDoc(lessonDoc, { participated: lessonData.participated });
+      alert("Dalyvavimas užregistruotas! Atidaroma nuoroda");
+    } else {
+      alert("Jau esate užregistruoti, tik atidaroma nuoroda");
+    }
+  }
+};
+
+export const enroll = async (lessonId: string, userId: string) => {
+  const lessonDoc = doc(db, "lessons", lessonId);
+  const lessonSnapshot = await getDoc(lessonDoc);
+  if (lessonSnapshot.exists()) {
+    const lessonData = lessonSnapshot.data() as Lesson;
+    if (!lessonData.onlyUseContent.includes(userId)) {
+      lessonData.onlyUseContent.push(userId);
+      await updateDoc(lessonDoc, { onlyUseContent: lessonData.onlyUseContent });
+      alert("Dalyvavimas užregistruotas!");
+    } else {
+      alert("Jūs jau dalyvavote!");
+    }
+  }
 };

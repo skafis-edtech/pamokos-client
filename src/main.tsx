@@ -2,13 +2,17 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
-import { ThemeProvider } from "@material-tailwind/react";
-import { CssBaseline, StyledEngineProvider } from "@mui/material";
+import {
+  CssBaseline,
+  StyledEngineProvider,
+  ThemeProvider,
+} from "@mui/material";
+import { theme } from "./theme.ts";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <StyledEngineProvider injectFirst>
-      <ThemeProvider>
+      <ThemeProvider theme={theme}>
         <CssBaseline />
         <App />
       </ThemeProvider>

@@ -1,6 +1,7 @@
 import { Box, Button, Modal } from "@mui/material";
 import { useNavigate } from "react-router";
 import { Lesson } from "../../types";
+import { useAuth } from "../../context/AuthContext";
 
 interface LessonModalProps {
   lesson: Lesson | null;
@@ -14,6 +15,7 @@ const LessonModal: React.FC<LessonModalProps> = ({
   handleClose,
 }) => {
   const navigate = useNavigate();
+  const { role } = useAuth();
   return (
     <Modal open={open} onClose={handleClose}>
       <Box className="bg-primary absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-4 w-[1000px] h-[500px]">
@@ -32,13 +34,17 @@ const LessonModal: React.FC<LessonModalProps> = ({
         <p>
           <strong>Meeting Link:</strong> {lesson?.meetingLink}
         </p>
-        <p>
-          <strong>Participated:</strong> {lesson?.participated.join(", ")}
-        </p>
-        <p>
-          <strong>Only Use Content:</strong> {lesson?.onlyUseContent.join(", ")}
-        </p>
-
+        {role === "TEACHER" && (
+          <>
+            <p>
+              <strong>Participated:</strong> {lesson?.participated.join(", ")}
+            </p>
+            <p>
+              <strong>Only Use Content:</strong>{" "}
+              {lesson?.onlyUseContent.join(", ")}
+            </p>
+          </>
+        )}
         <Button
           color="info"
           variant="outlined"
@@ -47,14 +53,15 @@ const LessonModal: React.FC<LessonModalProps> = ({
         >
           ❌
         </Button>
-
-        <Button
-          variant="outlined"
-          color="warning"
-          onClick={() => navigate(`/createEditLesson/${lesson?.id}`)}
-        >
-          Edit
-        </Button>
+        {role === "TEACHER" && (
+          <Button
+            variant="outlined"
+            color="warning"
+            onClick={() => navigate(`/createEditLesson/${lesson?.id}`)}
+          >
+            Edit
+          </Button>
+        )}
       </Box>
     </Modal>
   );
