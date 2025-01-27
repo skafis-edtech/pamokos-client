@@ -18,7 +18,7 @@ const LessonModal: React.FC<LessonModalProps> = ({
   const { role } = useAuth();
   return (
     <Modal open={open} onClose={handleClose}>
-      <Box className="bg-primary absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-4 w-[1000px] h-[500px]">
+      <Box className="bg-primary absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-4 w-[800px] max-w-full h-[500px]">
         <h2>{lesson?.title || "Error: No lesson selected"}</h2>
         <p>{lesson?.content}</p>
 

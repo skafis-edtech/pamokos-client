@@ -11,11 +11,16 @@ import { useEffect, useState } from "react";
 import { Group, Lesson } from "../../types";
 import LessonBox from "./LessonBox";
 import LessonModal from "./LessonModal";
+import {
+  defaultEndTime,
+  defaultGroupId,
+  defaultStartTime,
+} from "../../constants";
 
 const DashboardPage: React.FC = () => {
   const { currentUser, role } = useAuth();
   const navigate = useNavigate();
-  const groupId = "F8G4Xk6uQaB5REJDJ0l7"; // TODO:
+  const groupId = defaultGroupId;
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [open, setOpen] = useState(false);
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
@@ -29,12 +34,12 @@ const DashboardPage: React.FC = () => {
   const initiateNew = (groupId: string) => {
     createLesson({
       groupId: groupId,
-      title: "New Lesson",
-      startedAt: new Date().toISOString(),
-      endedAt: new Date().toISOString(),
-      content: "",
-      recording: "",
-      meetingLink: "",
+      title: "Nauja pamoka",
+      startedAt: defaultStartTime.toISOString(),
+      endedAt: defaultEndTime.toISOString(),
+      content: "Aptarta: ...",
+      recording: "https://drive.google.com/...",
+      meetingLink: "https://teams.microsoft.com/...",
       participated: [],
       onlyUseContent: [],
     }).then((lessonId) => navigate(`/createEditLesson/${lessonId}`));

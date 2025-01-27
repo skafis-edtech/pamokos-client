@@ -16,6 +16,7 @@ import { useState } from "react";
 import InfoIcon from "@mui/icons-material/Info";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { timeZoneString } from "../constants";
 
 interface HeaderProps {
   isLoggedIn: boolean;
@@ -31,6 +32,7 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn }) => {
   const DrawerList = (
     <Box>
       <List>
+        <ListItem>{timeZoneString} time</ListItem>
         {isLoggedIn ? (
           <ListItem
             key="logout"

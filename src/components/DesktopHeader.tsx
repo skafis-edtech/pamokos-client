@@ -1,4 +1,5 @@
 import { AppBar, Toolbar, Typography } from "@mui/material";
+import { timeZoneString } from "../constants";
 
 interface HeaderProps {
   isLoggedIn: boolean;
@@ -15,6 +16,8 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn }) => {
             component="div"
             className="flex-grow ml-2"
           ></Typography>
+
+          <h3>{timeZoneString} time</h3>
 
           <h3>
             <a href="/about" style={{ color: "white" }}>

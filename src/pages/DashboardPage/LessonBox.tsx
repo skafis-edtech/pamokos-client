@@ -2,6 +2,7 @@ import { Button, Paper, Typography } from "@mui/material";
 import { Lesson, LessonState } from "../../types";
 import { enroll } from "../../services/firestore";
 import { useAuth } from "../../context/AuthContext";
+import { applyTimeZoneOffset } from "../../constants";
 
 interface LessonBoxProps {
   lesson: Lesson;
@@ -10,7 +11,7 @@ interface LessonBoxProps {
 }
 
 const LessonBox: React.FC<LessonBoxProps> = ({ lesson, state, handleOpen }) => {
-  const { currentUser } = useAuth();
+  const { currentUser, role } = useAuth();
   if (state === "ONGOING") {
     return (
       <>
@@ -22,15 +23,24 @@ const LessonBox: React.FC<LessonBoxProps> = ({ lesson, state, handleOpen }) => {
           <Typography variant="h6" className="flex-1 text-left gap-2 flex">
             <span>{lesson.startedAt.substring(5, 10)}</span>
             <span>
-              <strong>{lesson.startedAt.substring(11, 16)}</strong>-
-              {lesson.endedAt.substring(11, 16)}
+              <strong>
+                {applyTimeZoneOffset(new Date(lesson.startedAt))
+                  .toISOString()
+                  .substring(11, 16)}
+              </strong>
+              -
+              {applyTimeZoneOffset(new Date(lesson.endedAt))
+                .toISOString()
+                .substring(11, 16)}
             </span>
           </Typography>
           <Typography
             variant="h5"
             className="text-green-700 font-bold flex-1 text-center"
           >
-            PRISIJUNGTI IR UŽSIRAŠYTI
+            {role === "TEACHER"
+              ? "PERŽIŪRĖTI TURINĮ"
+              : "PRISIJUNGTI IR UŽSIRAŠYTI"}
           </Typography>
           <Typography variant="h6" className="flex-1 italic text-right">
             {lesson.title}
