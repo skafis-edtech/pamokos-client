@@ -28,14 +28,14 @@ const HomeLoginPage: React.FC = () => {
 
   return (
     <Container maxWidth="sm">
-      <Box sx={{ mt: 4 }}>
+      <Box className="mt-4">
         <Typography variant="h4" component="h1" gutterBottom>
           Grupinės matematikos pamokos
         </Typography>
         <Link href="/about" variant="body2">
           Apie
         </Link>
-        <Box component="form" onSubmit={handleLogin} sx={{ mt: 2 }}>
+        <Box component="form" onSubmit={handleLogin} className="mt-2">
           <TextField
             fullWidth
             margin="normal"
@@ -61,7 +61,7 @@ const HomeLoginPage: React.FC = () => {
             color="primary"
             type="submit"
             fullWidth
-            sx={{ mt: 2 }}
+            className="mt-2"
           >
             Login
           </Button>
@@ -70,7 +70,7 @@ const HomeLoginPage: React.FC = () => {
             color="info"
             onClick={handlePasswordReset}
             fullWidth
-            sx={{ mt: 1 }}
+            className="mt-1"
           >
             Restore password
           </Button>

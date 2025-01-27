@@ -57,18 +57,19 @@ const TeacherDashboard: React.FC = () => {
         open={open}
         handleClose={handleClose}
       />
-      <Box p={2} sx={{ fontFamily: "'Roboto', sans-serif" }}>
-        <Typography variant="h5" sx={{ mb: 2 }}>
+      <Box className="p-2 font-roboto">
+        <Typography variant="h5" className="mb-2">
           Grupė {groupData?.name}
         </Typography>
         <Button
           variant="outlined"
           color="success"
           onClick={() => initiateNew(groupId)}
-          sx={{ width: "100%", p: 2, mb: 2 }}
+          className="p-2 w-full mb-28"
         >
           ➕
         </Button>
+
         {lessons
           .filter((item) => new Date(item.endedAt) > new Date())
           .map((item, index) => (
@@ -79,10 +80,10 @@ const TeacherDashboard: React.FC = () => {
               handleOpen={handleOpen}
             />
           ))}
-        <Typography variant="body1" sx={{ mb: 2 }}>
+        <Typography variant="body1" className="mb-28">
           Aprašymas
         </Typography>
-        <Typography variant="body1" sx={{ mb: 4, fontStyle: "italic" }}>
+        <Typography variant="body1" className="mb-4 italic">
           {groupData?.description}
         </Typography>
         {lessons

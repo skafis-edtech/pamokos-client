@@ -8,17 +8,6 @@ interface LessonModalProps {
   handleClose: () => void;
 }
 
-const style = {
-  position: "absolute" as const,
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  bgcolor: "background.paper",
-  p: 4,
-  width: 1000,
-  height: 500,
-};
-
 const LessonModal: React.FC<LessonModalProps> = ({
   lesson,
   open,
@@ -27,7 +16,7 @@ const LessonModal: React.FC<LessonModalProps> = ({
   const navigate = useNavigate();
   return (
     <Modal open={open} onClose={handleClose}>
-      <Box sx={style}>
+      <Box className="bg-primary absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-4 w-[1000px] h-[500px]">
         <h2>{lesson?.title || "Error: No lesson selected"}</h2>
         <p>{lesson?.content}</p>
 

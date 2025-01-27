@@ -8,12 +8,12 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn }) => {
   return (
     <div id="desktop-header">
       <AppBar position="static">
-        <Toolbar sx={{ gap: 4 }}>
+        <Toolbar className="gap-4">
           <img alt="Skafis logo" src="/favicon-32x32.png" />
           <Typography
             variant="h2"
             component="div"
-            sx={{ flexGrow: 1, ml: 2 }}
+            className="flex-grow ml-2"
           ></Typography>
 
           <h3>

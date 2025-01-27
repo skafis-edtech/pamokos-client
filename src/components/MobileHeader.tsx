@@ -81,7 +81,7 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn }) => {
           <Typography
             variant="h2"
             component="div"
-            sx={{ flexGrow: 1, ml: 2 }}
+            className="flex-grow ml-2"
           ></Typography>
           <IconButton
             edge="start"
