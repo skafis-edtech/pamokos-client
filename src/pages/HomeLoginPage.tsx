@@ -27,7 +27,15 @@ const HomeLoginPage: React.FC = () => {
   };
 
   return (
-    <Container maxWidth="sm">
+    <Container
+      maxWidth="sm"
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        marginTop: "20vh",
+        height: "100vh",
+      }}
+    >
       <Box className="mt-4">
         <Typography variant="h4" component="h1" gutterBottom>
           Grupinės matematikos pamokos
@@ -45,6 +53,8 @@ const HomeLoginPage: React.FC = () => {
             variant="outlined"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            InputProps={{ style: { fontSize: "1.2rem" } }}
+            InputLabelProps={{ style: { fontSize: "1.2rem" } }}
           />
           <TextField
             fullWidth
@@ -55,6 +65,8 @@ const HomeLoginPage: React.FC = () => {
             variant="outlined"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            InputProps={{ style: { fontSize: "1.2rem" } }}
+            InputLabelProps={{ style: { fontSize: "1.2rem" } }}
           />
           <Button
             variant="contained"

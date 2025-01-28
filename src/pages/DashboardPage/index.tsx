@@ -44,7 +44,7 @@ const DashboardPage: React.FC = () => {
       title: "Nauja pamoka",
       startedAt: defaultStartTime.toISOString(),
       endedAt: defaultEndTime.toISOString(),
-      content: "Aptarta: ...",
+      content: "https://miro.com/app/board/...",
       recording: "https://drive.google.com/...",
       meetingLink: "https://teams.microsoft.com/...",
       participated: [],

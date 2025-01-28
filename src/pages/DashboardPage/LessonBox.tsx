@@ -17,7 +17,7 @@ const LessonBox: React.FC<LessonBoxProps> = ({ lesson, state, handleOpen }) => {
       <>
         <Paper
           elevation={3}
-          className="flex justify-between items-center p-3 mb-2 border-4 border-green-700 bg-green-100 cursor-pointer hover:shadow-lg"
+          className="flex flex-col sm:flex-row justify-between items-center p-3 mb-2 border-4 border-green-700 bg-green-100 cursor-pointer hover:shadow-lg"
           onClick={() => handleOpen(lesson)}
         >
           <Typography variant="h6" className="flex-1 text-left gap-2 flex">
@@ -52,7 +52,7 @@ const LessonBox: React.FC<LessonBoxProps> = ({ lesson, state, handleOpen }) => {
     return (
       <Paper
         elevation={2}
-        className="flex justify-between items-center p-4 mb-2 cursor-pointer bg-gray-100 hover:shadow-lg"
+        className="flex flex-col sm:flex-row justify-between items-center p-4 mb-2 cursor-pointer bg-gray-100 hover:shadow-lg"
         onClick={() => handleOpen(lesson)}
       >
         <Typography variant="h6" className="flex-1 text-left">
@@ -68,7 +68,7 @@ const LessonBox: React.FC<LessonBoxProps> = ({ lesson, state, handleOpen }) => {
     return (
       <Paper
         elevation={2}
-        className="flex justify-between items-center p-2 mb-2 cursor-default bg-gray-300"
+        className="flex flex-col sm:flex-row justify-between items-center p-2 mb-2 cursor-default bg-gray-300"
         sx={{ backgroundColor: "#c0c0c0" }}
       >
         <Typography variant="h6" className="flex-1 text-left">

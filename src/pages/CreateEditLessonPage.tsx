@@ -3,14 +3,14 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate, useParams } from "react-router-dom";
 import { deleteLesson, fetchLesson, updateLesson } from "../services/firestore";
 import { Button, TextField } from "@mui/material";
-import { LessonCreate } from "../types";
+import { LessonDTO } from "../types";
 
 const CreateEditLessonPage: React.FC = () => {
   const { currentUser } = useAuth();
   const { id } = useParams<{ id: string }>();
 
   const navigate = useNavigate();
-  const [lesson, setLesson] = useState<LessonCreate | null>(null);
+  const [lesson, setLesson] = useState<LessonDTO | null>(null);
 
   useEffect(() => {
     if (id) {
