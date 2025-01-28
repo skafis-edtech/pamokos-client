@@ -16,18 +16,25 @@ import {
   defaultGroupId,
   defaultStartTime,
 } from "../../constants";
+import BillLine from "./BillLine";
 
 const DashboardPage: React.FC = () => {
   const { currentUser, role } = useAuth();
   const navigate = useNavigate();
   const groupId = defaultGroupId;
-  const [lessons, setLessons] = useState<Lesson[]>([]);
+  const [pastLessons, setPastLessons] = useState<Lesson[]>([]);
+  const [newLessons, setNewLessons] = useState<Lesson[]>([]);
   const [open, setOpen] = useState(false);
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
   const [groupData, setGroupData] = useState<Group | null>(null);
 
   useEffect(() => {
-    getLessons(groupId).then((data) => setLessons(data));
+    getLessons(groupId).then((data) => {
+      setPastLessons(
+        data.filter((item) => new Date(item.endedAt) <= new Date())
+      );
+      setNewLessons(data.filter((item) => new Date(item.endedAt) > new Date()));
+    });
     getGroupData(groupId).then((data) => setGroupData(data));
   }, []);
 
@@ -91,18 +98,14 @@ const DashboardPage: React.FC = () => {
           </Button>
         )}
 
-        {lessons
-          .filter((item) => new Date(item.endedAt) > new Date())
-          .map((item, index) => (
-            <LessonBox
-              key={index}
-              lesson={item}
-              state="ONGOING"
-              handleOpen={
-                role === "TEACHER" ? handleOpenInfo : handleParticipate
-              }
-            />
-          ))}
+        {newLessons.map((item, index) => (
+          <LessonBox
+            key={index}
+            lesson={item}
+            state="ONGOING"
+            handleOpen={role === "TEACHER" ? handleOpenInfo : handleParticipate}
+          />
+        ))}
         <Typography variant="body1" className="mb-28">
           Aprašymas
         </Typography>
@@ -110,11 +113,14 @@ const DashboardPage: React.FC = () => {
           {groupData?.description}
         </Typography>
         {currentUser &&
-          lessons
-            .filter((item) => new Date(item.endedAt) <= new Date())
-            .map((item, index) => (
+          pastLessons.map((item, index) => (
+            <div key={index}>
+              {index === 0 ||
+              new Date(item.endedAt).getMonth() !==
+                new Date(pastLessons[index - 1]?.endedAt).getMonth() ? (
+                <BillLine variant={index === 0 ? "DOTTED" : "SOLID"} />
+              ) : null}
               <LessonBox
-                key={index}
                 lesson={item}
                 state={
                   role === "TEACHER" ||
@@ -125,7 +131,8 @@ const DashboardPage: React.FC = () => {
                 }
                 handleOpen={handleOpenInfo}
               />
-            ))}
+            </div>
+          ))}
       </Box>
     </>
   );

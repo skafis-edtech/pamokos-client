@@ -37,3 +37,11 @@ Very similar stuff to https://github.com/skafis-edtech/testai
   }
 }
 ```
+
+> to be updated...
+
+Restrictions (not validated):
+
+1. Bills and reports from-to are monthly (UTC)
+2. Bills of reports have the same from-to values
+3. End time > start time, from > to.

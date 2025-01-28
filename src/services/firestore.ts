@@ -5,16 +5,18 @@ import {
   doc,
   getDoc,
   getDocs,
+  orderBy,
   query,
   updateDoc,
   where,
 } from "firebase/firestore";
-import { Bill, Group, Lesson, LessonCreate, UserRole } from "../types";
+import { BillDTO, Group, Lesson, LessonDTO, UserRole } from "../types";
 import { auth, db } from "./firebaseConfig";
 import {
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import { defaultTeacherId, lessonCost } from "../constants";
 
 export const fetchUserRole = async (userId: string) => {
   const userDoc = doc(db, `users/${userId}`);
@@ -62,15 +64,12 @@ export const fetchLesson = async (lessonId: string) => {
   return null;
 };
 
-export const createLesson = async (lessonData: LessonCreate) => {
+export const createLesson = async (lessonData: LessonDTO) => {
   const docRef = await addDoc(collection(db, "lessons"), lessonData);
   return docRef.id;
 };
 
-export const updateLesson = async (
-  lessonId: string,
-  lessonData: LessonCreate
-) => {
+export const updateLesson = async (lessonId: string, lessonData: LessonDTO) => {
   const docRef = doc(db, "lessons", lessonId);
   await updateDoc(docRef, { ...lessonData });
   alert("Pamoka atnaujinta!");
@@ -94,7 +93,11 @@ export const getGroupStudentIds = async (groupId: string) => {
 
 export const getLessons = async (groupId: string) => {
   const lessonsRef = collection(db, "lessons");
-  const lessonsQuery = query(lessonsRef, where("groupId", "==", groupId));
+  const lessonsQuery = query(
+    lessonsRef,
+    where("groupId", "==", groupId),
+    orderBy("startedAt", "desc")
+  );
   const lessonsSnapshot = await getDocs(lessonsQuery);
   return lessonsSnapshot.docs.map(
     (doc) => ({ id: doc.id, ...doc.data() } as Lesson)
@@ -121,23 +124,46 @@ export const participate = async (lessonId: string, userId: string) => {
       const billQuery = query(
         collection(db, "bills"),
         where("studentId", "==", userId),
-        where("lessonId", "==", lessonId),
+        where("teacherId", "==", defaultTeacherId),
         where("from", "<=", new Date()),
         where("to", ">=", new Date())
       );
       const billSnapshot = await getDocs(billQuery);
       if (!billSnapshot.empty) {
         const billDoc = billSnapshot.docs[0];
-        const billData = billDoc.data() as Bill;
+        const billData = billDoc.data() as BillDTO;
         billData.events.push({
           event: "CLICKED_ON_PARTICIPATION_LINK",
           timestamp: new Date().toISOString(),
         });
         await updateDoc(billDoc.ref, { events: billData.events });
       } else {
-        alert(
-          "Klaida: Nėra sąskaitos į kurią įrašyti įvykį! Būtinai susisiekite su mokytoju!"
-        );
+        const newBill: BillDTO = {
+          studentId: userId,
+          teacherId: defaultTeacherId,
+          from: new Date(
+            Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), 1)
+          ).toISOString(),
+          to: new Date(
+            Date.UTC(
+              new Date().getUTCFullYear(),
+              new Date().getUTCMonth() + 1,
+              0
+            )
+          ).toISOString(),
+          events: [
+            {
+              event: "CLICKED_ON_PARTICIPATION_LINK",
+              timestamp: new Date().toISOString(),
+            },
+          ],
+          amount: lessonCost,
+          isPaid: false,
+          writtenAt: "",
+          paidAt: "",
+          description: "",
+        };
+        await addDoc(collection(db, "bills"), newBill);
       }
       alert("Dalyvavimas užregistruotas! Atidaroma nuoroda");
     } else {
@@ -157,23 +183,46 @@ export const enroll = async (lessonId: string, userId: string) => {
       const billQuery = query(
         collection(db, "bills"),
         where("studentId", "==", userId),
-        where("lessonId", "==", lessonId),
+        where("teacherId", "==", defaultTeacherId),
         where("from", "<=", new Date()),
         where("to", ">=", new Date())
       );
       const billSnapshot = await getDocs(billQuery);
       if (!billSnapshot.empty) {
         const billDoc = billSnapshot.docs[0];
-        const billData = billDoc.data() as Bill;
+        const billData = billDoc.data() as BillDTO;
         billData.events.push({
           event: "ENROLLED",
           timestamp: new Date().toISOString(),
         });
         await updateDoc(billDoc.ref, { events: billData.events });
       } else {
-        alert(
-          "Klaida: Nėra sąskaitos į kurią įrašyti įvykį! Būtinai susisiekite su mokytoju!"
-        );
+        const newBill: BillDTO = {
+          studentId: userId,
+          teacherId: defaultTeacherId,
+          from: new Date(
+            Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), 1)
+          ).toISOString(),
+          to: new Date(
+            Date.UTC(
+              new Date().getUTCFullYear(),
+              new Date().getUTCMonth() + 1,
+              0
+            )
+          ).toISOString(),
+          events: [
+            {
+              event: "ENROLLED",
+              timestamp: new Date().toISOString(),
+            },
+          ],
+          amount: lessonCost,
+          isPaid: false,
+          writtenAt: "",
+          paidAt: "",
+          description: "",
+        };
+        await addDoc(collection(db, "bills"), newBill);
       }
       alert("Dalyvavimas užregistruotas!");
     } else {

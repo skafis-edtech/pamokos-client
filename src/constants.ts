@@ -17,6 +17,10 @@ export const defaultEndTime = new Date(
   defaultStartTime.getTime() + 60 * 60 * 1000
 );
 
+export const defaultTeacherId = "vWXHHTGQfwVwIiRceQtI1GoMl1H2";
+export const lessonCost = 5;
+
+//These are good
 export const timeZoneOffset = new Date().getTimezoneOffset() / -60;
 export const timeZoneString =
   "GMT" + (timeZoneOffset > 0 ? "+" : "") + timeZoneOffset;
