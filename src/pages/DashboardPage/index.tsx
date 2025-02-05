@@ -118,7 +118,10 @@ const DashboardPage: React.FC = () => {
               {index === 0 ||
               new Date(item.endedAt).getMonth() !==
                 new Date(pastLessons[index - 1]?.endedAt).getMonth() ? (
-                <BillLine variant={index === 0 ? "DOTTED" : "SOLID"} />
+                <BillLine
+                  variant={index === 0 ? "DOTTED" : "SOLID"}
+                  monthString={item.endedAt.substring(0, 7)}
+                />
               ) : null}
               <LessonBox
                 lesson={item}

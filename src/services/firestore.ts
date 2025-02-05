@@ -16,7 +16,12 @@ import {
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { defaultTeacherId, lessonCost } from "../constants";
+import {
+  defaultMonthEnd,
+  defaultMonthStart,
+  defaultTeacherId,
+  lessonCost,
+} from "../constants";
 
 export const fetchUserRole = async (userId: string) => {
   const userDoc = doc(db, `users/${userId}`);
@@ -132,36 +137,15 @@ export const participate = async (lessonId: string, userId: string) => {
       if (!billSnapshot.empty) {
         const billDoc = billSnapshot.docs[0];
         const billData = billDoc.data() as BillDTO;
-        billData.events.push({
-          event: "CLICKED_ON_PARTICIPATION_LINK",
-          timestamp: new Date().toISOString(),
-        });
-        await updateDoc(billDoc.ref, { events: billData.events });
+        await updateDoc(billDoc.ref, { amount: billData.amount + lessonCost });
       } else {
         const newBill: BillDTO = {
           studentId: userId,
           teacherId: defaultTeacherId,
-          from: new Date(
-            Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), 1)
-          ).toISOString(),
-          to: new Date(
-            Date.UTC(
-              new Date().getUTCFullYear(),
-              new Date().getUTCMonth() + 1,
-              0
-            )
-          ).toISOString(),
-          events: [
-            {
-              event: "CLICKED_ON_PARTICIPATION_LINK",
-              timestamp: new Date().toISOString(),
-            },
-          ],
+          from: defaultMonthStart,
+          to: defaultMonthEnd,
           amount: lessonCost,
-          isPaid: false,
-          writtenAt: "",
-          paidAt: "",
-          description: "",
+          status: "IN_PROGRESS",
         };
         await addDoc(collection(db, "bills"), newBill);
       }
@@ -191,11 +175,7 @@ export const enroll = async (lessonId: string, userId: string) => {
       if (!billSnapshot.empty) {
         const billDoc = billSnapshot.docs[0];
         const billData = billDoc.data() as BillDTO;
-        billData.events.push({
-          event: "ENROLLED",
-          timestamp: new Date().toISOString(),
-        });
-        await updateDoc(billDoc.ref, { events: billData.events });
+        await updateDoc(billDoc.ref, { amount: billData.amount + lessonCost });
       } else {
         const newBill: BillDTO = {
           studentId: userId,
@@ -210,17 +190,8 @@ export const enroll = async (lessonId: string, userId: string) => {
               0
             )
           ).toISOString(),
-          events: [
-            {
-              event: "ENROLLED",
-              timestamp: new Date().toISOString(),
-            },
-          ],
           amount: lessonCost,
-          isPaid: false,
-          writtenAt: "",
-          paidAt: "",
-          description: "",
+          status: "IN_PROGRESS",
         };
         await addDoc(collection(db, "bills"), newBill);
       }
@@ -228,5 +199,22 @@ export const enroll = async (lessonId: string, userId: string) => {
     } else {
       alert("Jūs jau užregistruotas! Klaida!");
     }
+  }
+};
+
+export const getBillByStartDate = async (
+  studentId: string,
+  startDate: Date
+) => {
+  const billQuery = query(
+    collection(db, "bills"),
+    where("studentId", "==", studentId),
+    where("from", "==", startDate.toISOString())
+  );
+  const billSnapshot = await getDocs(billQuery);
+  if (!billSnapshot.empty && billSnapshot.docs.length === 1) {
+    return billSnapshot.docs[0].data() as BillDTO;
+  } else {
+    return console.error("Bill not found");
   }
 };

@@ -1,12 +1,11 @@
 export type UserRole = "STUDENT" | "TEACHER";
 export type LessonState = "ONGOING" | "PAST" | "LOCKED";
-export type BillEvent =
-  | "CLICKED_ON_PARTICIPATION_LINK"
-  | "ENROLLED"
-  | "REMOVED_FROM_PARTICIPATED_LIST"
-  | "DEROLLED";
-export type BillStatus = "PAID" | "UNPAID" | "NOT_SUBMITTED";
-export type ToPayString = `(${number} + ${number})*5€=${number}€`;
+// export type BillEvent =
+//   | "CLICKED_ON_PARTICIPATION_LINK"
+//   | "ENROLLED"
+//   | "REMOVED_FROM_PARTICIPATED_LIST"
+//   | "DEROLLED";
+export type BillStatus = "IN_PROGRESS" | "PENDING" | "READY" | "PAID" | "LATE";
 
 export interface LessonDTO {
   title: string;
@@ -41,11 +40,7 @@ export interface BillDTO {
   to: string;
   studentId: string;
   teacherId: string;
-  isPaid: boolean;
-  writtenAt: string;
-  paidAt: string;
-  description: string;
-  events: { event: BillEvent; timestamp: string }[];
+  status: BillStatus;
 }
 
 export interface Bill extends BillDTO {
@@ -53,12 +48,7 @@ export interface Bill extends BillDTO {
 }
 
 export interface ReportDTO {
-  bills: {
-    billId: string;
-    status: BillStatus;
-    studentId: string;
-    toPayString: string;
-  }[];
+  bills: string[];
   from: string;
   to: string;
   teacherId: string;

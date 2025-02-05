@@ -26,3 +26,10 @@ export const timeZoneString =
   "GMT" + (timeZoneOffset > 0 ? "+" : "") + timeZoneOffset;
 export const applyTimeZoneOffset = (date: Date) =>
   new Date(date.getTime() + timeZoneOffset * 60 * 60 * 1000);
+export const defaultMonthStart = new Date(
+  Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), 1)
+).toISOString();
+
+export const defaultMonthEnd = new Date(
+  Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth() + 1, 0)
+).toISOString();
